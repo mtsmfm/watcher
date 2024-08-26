@@ -13,7 +13,7 @@ jobs:
           - node: 22
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/prebuild/centos7-devtoolset7:2.1.1
+      image: ghcr.io/prebuild/centos7-devtoolset7:2.2.0
       options: -u root
     steps:
       - uses: actions/checkout@v3
