@@ -1,0 +1,23 @@
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/prebuild/centos7-devtoolset7:2.1.1
+      options: -u root
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 22
+      - run: yarn prebuild
+        env:
+          PREBUILD_LIBC: glibc
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: prebuilds
+          path: prebuilds
