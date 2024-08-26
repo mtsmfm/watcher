@@ -1,0 +1,31 @@
+on:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - node: 16
+          - node: 18
+          - node: 20
+          - node: 22
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/prebuild/centos7-devtoolset7:2.2.0
+      options: -u root
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: ${{matrix.node}}
+      - run: yarn prebuild
+        env:
+          PREBUILD_LIBC: glibc
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: prebuilds
+          path: prebuilds
