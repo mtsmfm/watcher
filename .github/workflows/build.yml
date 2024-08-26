@@ -3,6 +3,14 @@ on:
 
 jobs:
   build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - node: 16
+          - node: 18
+          - node: 20
+          - node: 22
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/prebuild/centos7-devtoolset7:2.1.1
@@ -12,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 22
+          node-version: ${{matrix.node}}
       - run: yarn prebuild
         env:
           PREBUILD_LIBC: glibc
